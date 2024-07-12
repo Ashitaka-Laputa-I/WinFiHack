@@ -8,33 +8,34 @@ __        ___       _____ _ _   _            _
    \_/\_/  |_|_| |_|_|   |_|_| |_|\__,_|\___|_|\_\
 ```
 
-WinFiHack is a recreational attempt by me to rewrite my previous project [Brute-Hacking-Framework's](https://github.com/morpheuslord/Brute-Hacking-Framework-SourceCode) main wifi hacking script that uses netsh and native Windows scripts to create a wifi bruteforcer. This is in no way a fast script nor a superior way of doing the same hack but it needs no external libraries and just Python and python scripts.
+WinFiHack 是我对之前项目 [Brute-Hacking-Framework](https://github.com/morpheuslord/Brute-Hacking-Framework-SourceCode) 的主 WiFi 破解脚本的重新编写。这个脚本使用 netsh 和原生 Windows 脚本来创建一个 WiFi 暴力破解工具。它不是一个快速的脚本，也不是做相同破解的最佳方式，但它不需要外部库，只需 Python 和 Python 脚本即可。
 
-## Installation
+## 安装
 
-The packages are minimal or nearly none 😅. The package install command is:
+所需的包非常少或几乎没有 😅。安装命令如下：
 
 ```bash
 pip install rich pyfiglet
 ```
 
-Thats it.
+就这么简单。
 
-## Features
+## 特性
 
-So listing the features:
+列出功能如下：
 
-- _Overall Features:_
-  - We can use custom interfaces or non-default interfaces to run the attack.
-  - Well-defined way of using netsh and listing and utilizing targets.
-  - Upgradeability
-- _Code-Wise Features:_
-  - Interactive menu-driven system with `rich`.
-  - versatility in using interface, targets, and password files.
+- _总体功能：_
+  - 可以使用自定义接口或非默认接口来进行攻击。
+  - 使用 netsh 和列出、利用目标的方式清晰明了。
+  - 可升级性
 
-## How it works
+- _代码功能：_
+  - 使用 `rich` 的交互式菜单系统。
+  - 在接口、目标和密码文件使用上的多样性。
 
-So this is how the bruteforcer works:
+## 工作原理
+
+暴力破解工具的工作原理如下：
 
 ```mermaid
 sequenceDiagram
@@ -45,65 +46,64 @@ sequenceDiagram
     participant File
     participant Attack
 
-    User->>Tool: Provide interface (default: Wi-Fi)
-    Tool->>Interface: Disconnect all active network connections
-    Interface->>Network: Search for all available networks
-    User->>Tool: Set target network
-    User->>Tool: Input password file (default: ./wordlist/default.txt)
-    Note over Tool: Ready to run the attack
-    Tool->>Attack: Begin password loop
-    loop For each password
-        Attack->>File: Generate and store custom XML
-        Attack->>Network: Attempt connection
-        Network->>Attack: Verify connection (1 packet ping to Google)
-        alt Ping successful
-            Attack->>User: Connection established (Success)
-        else Ping failed
-            Attack->>User: Output failed
+    User->>Tool: 提供接口（默认：Wi-Fi）
+    Tool->>Interface: 断开所有活动的网络连接
+    Interface->>Network: 搜索所有可用的网络
+    User->>Tool: 设置目标网络
+    User->>Tool: 输入密码文件（默认：./wordlist/default.txt）
+    Note over Tool: 准备开始攻击
+    Tool->>Attack: 开始密码循环
+    loop 对每个密码
+        Attack->>File: 生成并存储自定义 XML
+        Attack->>Network: 尝试连接
+        Network->>Attack: 验证连接（1包 ping 到 Google）
+        alt Ping 成功
+            Attack->>User: 连接成功（成功）
+        else Ping 失败
+            Attack->>User: 输出失败
         end
     end
 ```
 
-- _Provide Interface:_
+- _提供接口：_
 
-  - The user is required to provide the network interface for the tool to use.
-  - By default, the interface is set to `Wi-Fi`.
+  - 用户需要提供工具使用的网络接口。
+  - 默认情况下，接口设置为 `Wi-Fi`。
 
-- _Search and Set Target:_
+- _搜索和设置目标：_
 
-  - The user must search for and select the target network.
-  - During this process, the tool performs the following sub-steps:
-    - Disconnects all active network connections for the selected interface.
-    - Searches for all available networks within range.
+  - 用户必须搜索并选择目标网络。
+  - 在此过程中，工具执行以下子步骤：
+    - 断开选定接口的所有活动网络连接。
+    - 搜索范围内的所有可用网络。
 
-- _Input Password File:_
+- _输入密码文件：_
 
-  - The user inputs the path to the password file.
-  - The default path for the password file is `./wordlist/default.txt`.
+  - 用户输入密码文件的路径。
+  - 默认密码文件路径为 `./wordlist/default.txt`。
 
-- _Run the Attack:_
+- _运行攻击：_
 
-  - With the target set and the password file ready, the tool is now prepared to initiate the attack.
+  - 在设置了目标和准备好密码文件后，工具准备启动攻击。
 
-- _Attack Procedure:_
-  - The attack involves iterating through each password in the provided file.
-  - For each password, the following steps are taken:
-    - A custom XML configuration for the connection attempt is generated and stored.
-    - The tool attempts to connect to the target network using the generated XML and the current password.
-    - To verify the success of the connection attempt, the tool performs a "1 packet ping" to Google.
-    - If the ping is unsuccessful, the connection attempt is considered failed, and the tool proceeds to the next password in the list.
-    - This loop continues until a successful ping response is received, indicating a successful connection attempt.
+- _攻击过程：_
+  - 攻击过程涉及遍历提供文件中的每个密码。
+  - 对于每个密码，执行以下步骤：
+    - 生成并存储用于连接尝试的自定义 XML 配置。
+    - 使用生成的 XML 和当前密码尝试连接到目标网络。
+    - 为验证连接尝试的成功性，工具执行对 Google 的“1包 ping”。
+    - 如果 ping 不成功，则连接尝试被视为失败，工具将继续下一个密码。
+    - 这个循环会一直进行，直到收到成功的 ping 响应，表示连接尝试成功。
 
-## How to run this
+## 如何运行
 
-After installing all the packages just run `python main.py` rest is history 👍 make sure you run this on Windows cause this won't work on any other OS.
-The interface looks like this:
-![image](https://github.com/morpheuslord/WinFiHack/assets/70637311/4f0fd195-7729-47fd-888c-0f1a64f90dce)
+在安装完所有包后，只需运行 `python main.py`，其余的就是历史了 👍 请确保在 Windows 上运行，因为它在其他操作系统上无法工作。界面如下：
+![image](README.assets/4f0fd195-7729-47fd-888c-0f1a64f90dce.png)
 
+## 贡献
 
-## Contributions
+有关贡献：
 
-For contributions:
-- *First Clone:* First Clone the repo into your dev env and do the edits.
-- *Comments:* I would apprtiate if you could add comments explaining your POV and also explaining the upgrade.
-- *Submit:* Submit a PR for me to verify the changes and apprive it if necessary.
+- *首先克隆：* 首先将代码库克隆到你的开发环境中并进行编辑。
+- *评论：* 我会很感激如果你能添加评论，解释你的观点和升级内容。
+- *提交：* 提交 PR 让我验证更改并在必要时批准。

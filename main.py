@@ -235,7 +235,7 @@ class WifiBruteForces:
         )
         sleep(5)
 
-        ping_cmd = "ping www.google.com -n 1"
+        ping_cmd = "ping www.baidu.com -n 1"
         ping_result = subprocess.run(
             ping_cmd,
             shell=True,
